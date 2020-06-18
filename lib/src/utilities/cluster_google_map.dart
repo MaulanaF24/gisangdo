@@ -25,6 +25,7 @@ class _ClusterGoogleMapState extends State<ClusterGoogleMap> {
   Fluster<MapMarker> _fluster;
   List<Marker> _markerList = [];
 
+  // ignore: unused_field
   GoogleMapController _mapController;
   double _currentZoom = 12.0;
 

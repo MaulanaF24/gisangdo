@@ -13,7 +13,6 @@ class Forecast extends StatefulWidget {
 
 class _ForecastState extends State<Forecast>
     with AutomaticKeepAliveClientMixin {
-  TextEditingController _searchController = TextEditingController();
   Weather _weatherModel;
 
   @override

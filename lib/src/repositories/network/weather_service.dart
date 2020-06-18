@@ -4,13 +4,6 @@ import 'package:gisangdo/src/repositories/response/weather_list_response.dart';
 
 @ChopperApi()
 abstract class WeatherService extends ChopperService {
-  static WeatherService create() {
-    final client = ChopperClient(
-        baseUrl: "api.openweathermap.org/data/2.5/",
-        converter: JsonConverter(),
-        services: [
-        ]);
-  }
 
   @Get(path: 'weather?',headers: {'x-api-key': 'ccc5f058edb6c2e9317bd58911650752'})
   Future<Response<Weather>> getWeatherUserLocation(

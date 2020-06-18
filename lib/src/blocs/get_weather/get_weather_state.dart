@@ -1,4 +1,3 @@
-import 'package:chopper/chopper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gisangdo/src/models/weather_model.dart';
 
