@@ -69,7 +69,20 @@ flutter:
       fonts:
         - asset: font/weathericons-regular.ttf
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/gisangdo_logo.png
+    - assets/badai.png
+    - assets/berangin.png
+    - assets/berawan.png
+    - assets/bersalju.png
+    - assets/cerah.png
+    - assets/clear.png
+    - assets/cloudy.png
+    - assets/hujan.png
+    - assets/mendung.png
+    - assets/rainy.png
+    - assets/snow.png
+    - assets/thunderstorm.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

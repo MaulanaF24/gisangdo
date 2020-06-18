@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gisangdo/src/blocs/user_location/user_location_bloc.dart';
 import 'package:gisangdo/src/page/forecast.dart';
 import 'package:gisangdo/src/page/maps.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -13,6 +12,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
+  bool isForecast = true;
 
   @override
   void initState() {
@@ -22,51 +22,82 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text("Gisangdo"),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {},
-              )
-            ],
-          ),
-          body: BlocBuilder<UserLocationBloc, UserLocationState>(
-            builder: (context, state) {
-              if (state is ShowUserLocation) {
-                return Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 40,
-                      child: TabBar(
-                        indicatorColor: Theme.of(context).primaryColor,
-                        indicatorSize: TabBarIndicatorSize.label,
-                        unselectedLabelColor: Colors.grey,
-                        isScrollable: true,
-                        labelColor: Theme.of(context).accentColor,
-                        labelPadding: EdgeInsets.fromLTRB(60, 0, 60, 0),
-                        tabs: <Widget>[
-                          Tab(text: "Maps"),
-                          Tab(text: "Forecast"),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: <Widget>[Maps(), Forecast()],
-                      ),
-                    ),
-                  ],
-                );
-              }
-              return Container(
-                child: Text("GOBLOK"),
-              );
-            },
-          )),
-    );
+    return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Column(
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 32,
+                    backgroundImage: AssetImage('assets/gisangdo_logo.png'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text('Gisangdo'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text('Weather forecast on Map'),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Icon(Icons.cloud),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text('Weather'),
+                  )
+                ],
+              ),
+             onTap: (){
+               if(!isForecast){
+                 setState(() {
+                   isForecast = true;
+                 });
+               }
+               Navigator.pop(context);
+             },
+            ),
+            ListTile(
+              title: Row(
+                children: <Widget>[
+                  Icon(Icons.map),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text('Forecast Map'),
+                  )
+                ],
+              ),
+              onTap: (){
+                if(isForecast){
+                  setState(() {
+                    isForecast = false;
+                  });
+                }
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+        appBar: AppBar(
+          title: Text("Gisangdo"),
+        ),
+        body: BlocBuilder<UserLocationBloc, UserLocationState>(
+          builder: (context, state) {
+            if (state is ShowUserLocation) {
+              return isForecast ? Forecast() : Maps();
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ));
   }
 }

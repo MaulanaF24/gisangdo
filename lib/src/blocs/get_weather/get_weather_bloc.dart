@@ -52,6 +52,8 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
       FetchWeatherByCity event) async* {
     try {
       final weather = await _weatherRepository.getWeatherByCity(event.city);
+      final weathers = await _weatherRepository.getListWeather(event.city);
+      weather.forecast = weathers;
       print("${weather.toString()}");
       yield ShowWeatherState(weather);
     } catch (e) {

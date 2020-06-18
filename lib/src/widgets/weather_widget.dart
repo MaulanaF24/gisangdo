@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gisangdo/src/models/weather_model.dart';
 import 'package:gisangdo/src/widgets/forecast_horizontal_widget.dart';
@@ -12,27 +13,25 @@ class WeatherWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          SizedBox(height: 30),
           Text(
             this.weather.cityName.toUpperCase(),
             style: TextStyle(
-                fontWeight: FontWeight.w900,
-                letterSpacing: 5,
-                fontSize: 25),
+                fontWeight: FontWeight.w900, letterSpacing: 5, fontSize: 25),
           ),
           SizedBox(
             height: 20,
           ),
-          Text(
-            this.weather.description.toUpperCase(),
-            style: TextStyle(
+          Text(this.weather.description.toUpperCase(),
+              style: TextStyle(
                 fontWeight: FontWeight.w100,
                 letterSpacing: 5,
                 fontSize: 15,
-          )),
+              )),
           WeatherSwipePager(weather: weather),
           Padding(
             child: Divider(),
@@ -40,8 +39,7 @@ class WeatherWidget extends StatelessWidget {
           ),
           ForecastHorizontal(weathers: weather.forecast),
           Padding(
-            child: Divider(
-            ),
+            child: Divider(),
             padding: EdgeInsets.all(10),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[

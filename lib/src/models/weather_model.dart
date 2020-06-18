@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gisangdo/src/utilities/icon_generator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Weather {
   int id;
