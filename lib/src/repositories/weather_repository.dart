@@ -10,18 +10,18 @@ class WeatherRepository {
 
  WeatherRepository(this._weatherApiService);
 
-  Future<WeatherModel> getWeatherByUserLocation(LatLng latLng) async {
+  Future<Weather> getWeatherByUserLocation(LatLng latLng) async {
     final response = await _weatherApiService.getWeatherByUserLocation(latLng);
     return response;
   }
 
- Future<WeatherModel> getWeatherByCity(String city) async {
+ Future<Weather> getWeatherByCity(String city) async {
    final response = await _weatherApiService.getWeatherByCity(city);
    return response;
  }
 
- Future<List<WeatherModel>> getListWeather(LatLng latLng) async {
-    final response = await _weatherApiService.getListWeather(latLng);
-    return response.weatherList;
+ Future<List<Weather>> getListWeather(String city) async {
+    final response = await _weatherApiService.getForecast(city);
+    return response;
  }
 }

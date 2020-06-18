@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:gisangdo/src/models/weather_model.dart';
 import 'package:gisangdo/src/repositories/response/weather_list_response.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,29 +9,39 @@ class WeatherApiService {
   static const apiKey = 'ccc5f058edb6c2e9317bd58911650752';
   final Client httpClient;
 
-  WeatherApiService({@required this.httpClient}) : assert(httpClient != null);
+  WeatherApiService({this.httpClient}) : assert(httpClient != null);
 
-  Future<WeatherModel> getWeatherByUserLocation(LatLng latLng) async {
+  Future<Weather> getWeatherByUserLocation(LatLng latLng) async {
     final url =
         "$baseUrl/weather?lat=${latLng.latitude}&lon=${latLng.longitude}&units=metric&appid=$apiKey";
     final response = await httpClient.get(url);
     final json = jsonDecode(response.body);
-    return WeatherModel.fromJson(json);
+    return Weather.fromJson(json);
   }
 
-  Future<WeatherModel> getWeatherByCity(String city) async {
+  Future<Weather> getWeatherByCity(String city) async {
     final url =
         "$baseUrl/weather?q=$city&units=metric&appid=$apiKey";
     final response = await httpClient.get(url);
     final json = jsonDecode(response.body);
-    return WeatherModel.fromJson(json);
+    return Weather.fromJson(json);
   }
 
-  Future<WeatherListResponse> getListWeather(LatLng latLng) async {
+  Future<List<Weather>> getListWeather(LatLng latLng) async {
     final url =
         "$baseUrl/weather?lat=${latLng.latitude}&lon=${latLng.longitude}&cnt=10&units=metric&appid=$apiKey";
     final response = await httpClient.get(url);
     final json = jsonDecode(response.body);
-    return WeatherListResponse.fromJson(json);
+    final weathers = Weather.fromForecastJson(json);
+    return weathers;
+  }
+
+  Future<List<Weather>> getForecast(String cityName) async {
+    final url = '$baseUrl/forecast?q=$cityName&appid=$apiKey';
+    print('fetching $url');
+    final res = await this.httpClient.get(url);
+    final forecastJson = json.decode(res.body);
+    List<Weather> weathers = Weather.fromForecastJson(forecastJson);
+    return weathers;
   }
 }

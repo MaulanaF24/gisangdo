@@ -6,7 +6,7 @@ class WeatherListResponse {
   static const fromJsonFactory = _$WeatherListResponseFromJson;
 
   @JsonKey(name: 'list')
-  final List<WeatherModel> weatherList;
+  final List<Weather> weatherList;
 
   WeatherListResponse(this.weatherList);
 
@@ -15,6 +15,6 @@ class WeatherListResponse {
 
 WeatherListResponse _$WeatherListResponseFromJson(Map<String, dynamic> json) {
   return WeatherListResponse((json['list'] as List)
-      ?.map((e) => e == null ? null : WeatherModel.fromJson(e))
+      ?.map((e) => e == null ? null : Weather.fromJson(e))
       ?.toList());
 }

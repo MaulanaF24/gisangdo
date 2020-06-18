@@ -10,7 +10,7 @@ class InitialGetWeatherState extends GetWeatherState {}
 class LoadingWeatherState extends GetWeatherState {}
 
 class ShowWeatherState extends GetWeatherState {
-  final WeatherModel weatherModel;
+  final Weather weatherModel;
 
   ShowWeatherState(this.weatherModel);
 

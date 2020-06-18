@@ -3,13 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gisangdo/src/blocs/get_weather/get_weather_bloc.dart';
 import 'package:gisangdo/src/models/weather_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:gisangdo/src/widgets/weather_widget.dart';
 
 class Forecast extends StatefulWidget {
-  final LatLng latLng;
-
-  Forecast(this.latLng);
-
   @override
   _ForecastState createState() => _ForecastState();
 }
@@ -17,12 +13,11 @@ class Forecast extends StatefulWidget {
 class _ForecastState extends State<Forecast>
     with AutomaticKeepAliveClientMixin {
   TextEditingController _searchController = TextEditingController();
-  WeatherModel _weatherModel;
+  Weather _weatherModel;
 
   @override
   void initState() {
     super.initState();
-    //BlocProvider.of<GetWeatherBloc>(context).add(FetchWeather(widget.latLng));
   }
 
   @override
@@ -57,16 +52,11 @@ class _ForecastState extends State<Forecast>
               print(state.toString());
               if (state is ShowWeatherState) {
                 _weatherModel = state.weatherModel;
-                return Expanded(
-                  flex: 9,
-                  child: Column(
-                    children: <Widget>[Text(_weatherModel.name)],
-                  ),
-                );
+                return WeatherWidget(weather: _weatherModel);
               }
               return Center(child: CircularProgressIndicator());
             },
-          )
+          ) 
         ],
       ),
     );

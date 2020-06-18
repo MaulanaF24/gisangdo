@@ -1,189 +1,111 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:gisangdo/src/utilities/icon_generator.dart';
 
-part 'weather_model.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class WeatherModel extends Equatable{
-  static const fromJsonFactory = _$WeatherModelFromJson;
-  @JsonKey(name: 'coord')
-  Coord coord;
-
-  @JsonKey(name: 'weather')
-  List<Weather> weather;
-
-  @JsonKey(name: 'base')
-  String base;
-
-  @JsonKey(name: 'main')
-  Main main;
-
-  @JsonKey(name: 'visibility')
-  int visibility;
-
-  @JsonKey(name:'wind')
-  Wind wind;
-
-  @JsonKey(name: 'clouds')
-  Clouds clouds;
-
-  @JsonKey(name: 'dt')
-  int dt;
-
-  @JsonKey(name: 'sys')
-  Sys sys;
-
-  @JsonKey(name: 'timezone')
-  int timezone;
-
-  @JsonKey(name: 'id')
+class Weather {
   int id;
-
-  @JsonKey(name: 'name')
-  String name;
-
-  @JsonKey(name: 'cod')
-  int cod;
-
-  WeatherModel(
-      {this.coord,
-        this.weather,
-        this.base,
-        this.main,
-        this.visibility,
-        this.wind,
-        this.clouds,
-        this.dt,
-        this.sys,
-        this.timezone,
-        this.id,
-        this.name,
-        this.cod});
-
-  factory WeatherModel.fromJson(Map<String, dynamic> json) => _$WeatherModelFromJson(json);
-  Map<String, dynamic> toJson() => _$WeatherModelToJson(this);
-}
-
-@JsonSerializable()
-class Coord extends Equatable{
-
-  @JsonKey(name: 'lon')
-  double lon;
-
-  @JsonKey(name: 'lat')
-  double lat;
-
-  Coord({this.lon, this.lat});
-
-  factory Coord.fromJson(dynamic json) => _$CoordFromJson(json);
-  Map<String, dynamic> toJson() => _$CoordToJson(this);
-}
-
-@JsonSerializable()
-class Weather extends Equatable {
-
-  @JsonKey(name: 'id')
-  int id;
-
-  @JsonKey(name: 'main')
-  String main;
-
-  @JsonKey(name: 'description')
-  String description;
-
-  @JsonKey(name: 'icon')
-  String icon;
-
-  Weather({this.id, this.main, this.description, this.icon});
-
-  factory Weather.fromJson(dynamic json) => _$WeatherFromJson(json);
-
-  Map<String, dynamic> toJson() => _$WeatherToJson(this);
-}
-
-@JsonSerializable()
-class Main extends Equatable{
-
-  @JsonKey(name:'temp')
-  double temp;
-
-  @JsonKey(name:'feelsLike')
-  double feelsLike;
-
-  @JsonKey(name:'tempMin')
-  double tempMin;
-
-  @JsonKey(name:'tempMax')
-  double tempMax;
-
-  @JsonKey(name:'pressure')
-  double pressure;
-
-  @JsonKey(name:'humidity')
-  double humidity;
-
-  Main(
-      {this.temp,
-        this.feelsLike,
-        this.tempMin,
-        this.tempMax,
-        this.pressure,
-        this.humidity});
-
-  factory Main.fromJson(dynamic json) => _$MainFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MainToJson(this);
-}
-
-@JsonSerializable()
-class Wind extends Equatable{
-
-  @JsonKey(name:'speed')
-  double speed;
-
-
-
-  Wind({this.speed});
-
-  factory Wind.fromJson(dynamic json) => _$WindFromJson(json);
-
-  Map<String, dynamic> toJson() => _$WindToJson(this);
-}
-
-@JsonSerializable()
-class Clouds extends Equatable{
-
-  @JsonKey(name:'all')
-  int all;
-
-  Clouds({this.all});
-
-  factory Clouds.fromJson(dynamic json) => _$CloudsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CloudsToJson(this);
-}
-
-@JsonSerializable()
-class Sys extends Equatable{
-
-  @JsonKey(name:'type')
-  int type;
-
-  @JsonKey(name:'id')
-  int id;
-
-  @JsonKey(name:'country')
-  String country;
-
-  @JsonKey(name:'sunrise')
+  int time;
   int sunrise;
-
-  @JsonKey(name:'sunset')
   int sunset;
+  int humidity;
 
-  Sys({this.type, this.id, this.country, this.sunrise, this.sunset});
+  String description;
+  String iconCode;
+  String main;
+  String cityName;
 
-  factory Sys.fromJson(dynamic json) => _$SysFromJson(json);
+  double windSpeed;
 
-  Map<String, dynamic> toJson() => _$SysToJson(this);
+  double temperature;
+  double maxTemperature;
+  double minTemperature;
+
+  List<Weather> forecast;
+
+  Weather(
+      {this.id,
+      this.time,
+      this.sunrise,
+      this.sunset,
+      this.humidity,
+      this.description,
+      this.iconCode,
+      this.main,
+      this.cityName,
+      this.windSpeed,
+      this.temperature,
+      this.maxTemperature,
+      this.minTemperature,
+      this.forecast});
+
+  static Weather fromJson(Map<String, dynamic> json) {
+    final weather = json['weather'][0];
+    final temp = json['main']['temp'];
+    final maxTemp = json['main']['temp_max'];
+    final minTemp = json['main']['temp_min'];
+    final windSpeed = json['wind']['speed'];
+    return Weather(
+      id: weather['id'],
+      time: json['dt'],
+      description: weather['description'],
+      iconCode: weather['icon'],
+      main: weather['main'],
+      cityName: json['name'],
+      temperature: temp is int ? temp.toDouble() : temp,
+      maxTemperature: maxTemp is int ? maxTemp.toDouble() : maxTemp,
+      minTemperature: minTemp is int ? minTemp.toDouble() : minTemp,
+      sunrise: json['sys']['sunrise'],
+      sunset: json['sys']['sunset'],
+      humidity: json['main']['humidity'],
+      windSpeed: windSpeed is int ? windSpeed.toDouble() : windSpeed,
+    );
+  }
+
+  static List<Weather> fromForecastJson(Map<String, dynamic> json) {
+    final weathers = (json['list'] as List)
+        ?.map((e) => e == null ? null : Weather.fromJson(e))
+        ?.toList();
+
+    return weathers;
+  }
+
+  IconData getIconData() {
+    switch (this.iconCode) {
+      case '01d':
+        return WeatherIcons.clear_day;
+      case '01n':
+        return WeatherIcons.clear_night;
+      case '02d':
+        return WeatherIcons.few_clouds_day;
+      case '02n':
+        return WeatherIcons.few_clouds_day;
+      case '03d':
+      case '04d':
+        return WeatherIcons.clouds_day;
+      case '03n':
+      case '04n':
+        return WeatherIcons.clear_night;
+      case '09d':
+        return WeatherIcons.shower_rain_day;
+      case '09n':
+        return WeatherIcons.shower_rain_night;
+      case '10d':
+        return WeatherIcons.rain_day;
+      case '10n':
+        return WeatherIcons.rain_night;
+      case '11d':
+        return WeatherIcons.thunder_storm_day;
+      case '11n':
+        return WeatherIcons.thunder_storm_night;
+      case '13d':
+        return WeatherIcons.snow_day;
+      case '13n':
+        return WeatherIcons.snow_night;
+      case '50d':
+        return WeatherIcons.mist_day;
+      case '50n':
+        return WeatherIcons.mist_night;
+      default:
+        return WeatherIcons.clear_day;
+    }
+  }
 }

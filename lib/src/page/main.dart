@@ -20,19 +20,22 @@ class GisangdoApp extends StatelessWidget {
 
   GisangdoApp(this._weatherRepository);
 
-  final ThemeData themeData = ThemeData(
-    primaryColor: Colors.orange[700],
-    accentColor: Colors.yellow[800],
-    fontFamily: 'Montserrat',
-    buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-  );
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Gisangdo',
-        theme: themeData.copyWith(brightness: Brightness.light),
-        darkTheme: themeData.copyWith(brightness: Brightness.dark),
+        theme:ThemeData(
+            primaryColor: Colors.lightBlue[800],
+            accentColor: Colors.cyan[600],
+            fontFamily: 'Montserrat',
+            brightness: Brightness.light,
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary)),
+        darkTheme: ThemeData(
+            primaryColor: Colors.lightBlue[800],
+            accentColor: Colors.cyan[600],
+            fontFamily: 'Montserrat',
+            brightness: Brightness.dark,
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary)),
         home: MultiBlocProvider(providers: [
           BlocProvider<UserLocationBloc>(
               create: (context) => UserLocationBloc()),
@@ -46,7 +49,7 @@ class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print(transition);
+    print(transition.toString());
   }
 
   @override
@@ -58,6 +61,6 @@ class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
-    print(event);
+    print(event.toString());
   }
 }

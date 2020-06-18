@@ -13,7 +13,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
-  LatLng _latLng;
 
   @override
   void initState() {
@@ -38,7 +37,6 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           body: BlocBuilder<UserLocationBloc, UserLocationState>(
             builder: (context, state) {
               if (state is ShowUserLocation) {
-                _latLng = state.userLocation;
                 return Column(
                   children: <Widget>[
                     SizedBox(
@@ -58,7 +56,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                     ),
                     Expanded(
                       child: TabBarView(
-                        children: <Widget>[Maps(_latLng), Forecast(_latLng)],
+                        children: <Widget>[Maps(), Forecast()],
                       ),
                     ),
                   ],

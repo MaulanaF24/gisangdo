@@ -27,8 +27,7 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
   Stream<UserLocationState> mapGetUserLocationToState(
       GetUserLocation event) async* {
     try {
-      PermissionStatus permission = await PermissionHandler()
-          .checkPermissionStatus(PermissionGroup.location);
+      PermissionStatus permission = await Permission.location.request();
       if (permission == PermissionStatus.granted) {
         position = await _geolocation.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
