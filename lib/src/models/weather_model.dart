@@ -53,10 +53,8 @@ class Weather {
         position: LatLng(
           latitude,
           longitude,
-        ),infoWindow: InfoWindow(
-    title: cityName,
-    snippet: '$temperature°'
-  ),
+        ),
+        infoWindow: InfoWindow(title: cityName, snippet: '$temperature°'),
         icon: await BitmapDescriptor.fromAssetImage(
             ImageConfiguration(size: Size(8, 8)), iconCode.toWeatherIcon()),
       );
@@ -92,7 +90,8 @@ class Weather {
     );
   }
 
-  static List<Weather> fromForecastJson(Map<String, dynamic> json,bool isList) {
+  static List<Weather> fromForecastJson(Map<String, dynamic> json,
+      bool isList) {
     final weathers = (json['list'] as List)
         ?.map((e) => e == null ? null : Weather.fromJson(e, isList: isList))
         ?.toList();

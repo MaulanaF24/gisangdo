@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:gisangdo/src/models/map_marker.dart';
 import 'package:gisangdo/src/models/weather_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

@@ -36,7 +36,7 @@ class WeatherApiService {
   }
 
   Future<List<Weather>> getForecast(String cityName) async {
-    final url = '$baseUrl/forecast?q=$cityName&appid=$apiKey';
+    final url = '$baseUrl/forecast?q=$cityName&units=metric&appid=$apiKey';
     print('fetching $url');
     final res = await this.httpClient.get(url);
     final forecastJson = json.decode(res.body);

@@ -25,6 +25,8 @@ class ClusterGoogleMap extends StatefulWidget {
 
 class _ClusterGoogleMapState extends State<ClusterGoogleMap> {
   Fluster<MapMarker> _fluster;
+
+  // ignore: unused_field
   List<Marker> _markerList = [];
 
   // ignore: unused_field
@@ -55,7 +57,7 @@ class _ClusterGoogleMapState extends State<ClusterGoogleMap> {
         ),
         gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
           new Factory<OneSequenceGestureRecognizer>(
-                () => new EagerGestureRecognizer(),
+            () => new EagerGestureRecognizer(),
           ),
         ].toSet());
   }
