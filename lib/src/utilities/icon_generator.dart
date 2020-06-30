@@ -1,46 +1,46 @@
 import 'package:flutter/material.dart';
 
 extension WeatherIconGenerator on String {
-  ImageIcon toWeatherIcon() {
+  String toWeatherIcon() {
     switch (this) {
       case "02d":
       case "02n":
-        return ImageIcon(AssetImage("assets/berawan.png"));
+        return "assets/berawan.png";
         break;
 
       case "03d":
       case "03n":
       case "04d":
       case "04n":
-        return ImageIcon(AssetImage("assets/mendung.png"));
+        return "assets/mendung.png";
         break;
 
       case "09d":
       case "09n":
       case "10d":
       case "10n":
-        return ImageIcon(AssetImage("assets/hujan.png"));
+        return "assets/hujan.png";
         break;
 
       case "11d":
       case "11n":
-        return ImageIcon(AssetImage("assets/badai.png"));
+        return "assets/badai.png";
         break;
 
       case "13d":
       case "13n":
-        return ImageIcon(AssetImage("assets/bersalju.png"));
+        return "assets/bersalju.png";
         break;
 
       case "50d":
       case "50n":
-        return ImageIcon(AssetImage("assets/berangin.png"));
+        return "assets/berangin.png";
         break;
 
       case "01d":
       case "01n":
       default:
-        return ImageIcon(AssetImage("assets/cerah.png"));
+        return "assets/cerah.png";
         break;
     }
   }

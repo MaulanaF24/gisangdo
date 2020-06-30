@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:fluster/fluster.dart';
 import 'package:flutter/material.dart';
+import 'package:gisangdo/src/utilities/icon_generator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapMarker extends Clusterable {
@@ -43,17 +44,7 @@ class MapMarker extends Clusterable {
           position.latitude,
           position.longitude,
         ),
-        icon: await _createMarkerIcon(clusterSize, color),
+        icon: await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(16, 16)), imageUrl.toWeatherIcon()),
       );
-
-  Future<BitmapDescriptor> _createMarkerIcon(
-      int clusterSize, Color color) async {
-    var myIcon;
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(48, 48)), 'assets/my_icon.png')
-        .then((onValue) {
-      myIcon = onValue;
-    });
-    return myIcon;
-  }
 }

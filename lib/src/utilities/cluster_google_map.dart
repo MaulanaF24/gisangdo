@@ -10,9 +10,11 @@ const DEFAULT_CENTER = LatLng(-6.117664, 106.906349);
 class ClusterGoogleMap extends StatefulWidget {
   final ClusterGoogleMapController controller;
   final LatLng center;
+  final List<Marker> markerList;
 
   ClusterGoogleMap({
     this.controller,
+    this.markerList,
     this.center = DEFAULT_CENTER,
     Key key,
   }) : super(key: key);
@@ -46,7 +48,7 @@ class _ClusterGoogleMapState extends State<ClusterGoogleMap> {
         onMapCreated: _onMapCreated,
         onCameraMove: _onCameraMove,
         onCameraIdle: _onCameraIdle,
-        markers: Set<Marker>.of(_markerList),
+        markers: Set<Marker>.of(widget.markerList),
         initialCameraPosition: CameraPosition(
           target: widget.center,
           zoom: _currentZoom,

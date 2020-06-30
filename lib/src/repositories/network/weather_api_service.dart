@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:gisangdo/src/models/weather_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
@@ -15,23 +16,22 @@ class WeatherApiService {
         "$baseUrl/weather?lat=${latLng.latitude}&lon=${latLng.longitude}&units=metric&appid=$apiKey";
     final response = await httpClient.get(url);
     final json = jsonDecode(response.body);
-    return Weather.fromJson(json);
+    return Weather.fromJson(json, isList: false);
   }
 
   Future<Weather> getWeatherByCity(String city) async {
-    final url =
-        "$baseUrl/weather?q=$city&units=metric&appid=$apiKey";
+    final url = "$baseUrl/weather?q=$city&units=metric&appid=$apiKey";
     final response = await httpClient.get(url);
     final json = jsonDecode(response.body);
-    return Weather.fromJson(json);
+    return Weather.fromJson(json, isList: false);
   }
 
   Future<List<Weather>> getListWeather(LatLng latLng) async {
     final url =
-        "$baseUrl/weather?lat=${latLng.latitude}&lon=${latLng.longitude}&cnt=10&units=metric&appid=$apiKey";
+        "$baseUrl/find?lat=${latLng.latitude}&lon=${latLng.longitude}&cnt=10&units=metric&appid=$apiKey";
     final response = await httpClient.get(url);
     final json = jsonDecode(response.body);
-    final weathers = Weather.fromForecastJson(json);
+    final weathers = Weather.fromForecastJson(json,true);
     return weathers;
   }
 
@@ -40,7 +40,7 @@ class WeatherApiService {
     print('fetching $url');
     final res = await this.httpClient.get(url);
     final forecastJson = json.decode(res.body);
-    List<Weather> weathers = Weather.fromForecastJson(forecastJson);
+    List<Weather> weathers = Weather.fromForecastJson(forecastJson,false);
     return weathers;
   }
 }

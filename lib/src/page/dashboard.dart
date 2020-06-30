@@ -92,7 +92,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         body: BlocBuilder<UserLocationBloc, UserLocationState>(
           builder: (context, state) {
             if (state is ShowUserLocation) {
-              return isForecast ? Forecast() : Maps();
+              return isForecast ? Forecast() : Maps(state.userLocation);
             }
             return Center(
               child: CircularProgressIndicator(),

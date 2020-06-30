@@ -21,4 +21,9 @@ class WeatherRepository {
     final response = await _weatherApiService.getForecast(city);
     return response;
  }
+
+ Future<List<Weather>> getMapWeather(LatLng latLng) async {
+   final response = await _weatherApiService.getListWeather(latLng);
+   return response;
+ }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gisangdo/src/blocs/get_weather/get_weather_bloc.dart';
+import 'package:gisangdo/src/blocs/map_weather/map_weather_bloc.dart';
 import 'package:gisangdo/src/blocs/user_location/user_location_bloc.dart';
 import 'package:gisangdo/src/page/dashboard.dart';
 import 'package:gisangdo/src/repositories/network/weather_api_service.dart';
@@ -24,7 +25,7 @@ class GisangdoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Gisangdo',
-        theme:ThemeData(
+        theme: ThemeData(
             primaryColor: Colors.lightBlue[800],
             accentColor: Colors.cyan[600],
             fontFamily: 'Montserrat',
@@ -40,8 +41,11 @@ class GisangdoApp extends StatelessWidget {
           BlocProvider<UserLocationBloc>(
               create: (context) => UserLocationBloc()),
           BlocProvider<GetWeatherBloc>(
-              create: (context) => GetWeatherBloc(_weatherRepository,RepositoryProvider.of(context))),
-          ], child: Dashboard()));
+              create: (context) => GetWeatherBloc(
+                  _weatherRepository, RepositoryProvider.of(context))),
+          BlocProvider<MapWeatherBloc>(
+              create: (context) => MapWeatherBloc(_weatherRepository)),
+        ], child: Dashboard()));
   }
 }
 

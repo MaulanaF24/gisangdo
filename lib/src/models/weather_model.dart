@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gisangdo/src/models/map_marker.dart';
 import 'package:gisangdo/src/utilities/icon_generator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Weather {
   int id;
@@ -13,8 +15,10 @@ class Weather {
   String main;
   String cityName;
 
-  double windSpeed;
+  double latitude;
+  double longitude;
 
+  double windSpeed;
   double temperature;
   double maxTemperature;
   double minTemperature;
@@ -31,18 +35,44 @@ class Weather {
       this.iconCode,
       this.main,
       this.cityName,
+      this.latitude,
+      this.longitude,
       this.windSpeed,
       this.temperature,
       this.maxTemperature,
       this.minTemperature,
       this.forecast});
 
-  static Weather fromJson(Map<String, dynamic> json) {
+  MapMarker toMapMarker() => MapMarker(
+      id: id.toString(),
+      position: LatLng(latitude, longitude),
+      imageUrl: iconCode);
+
+  Future<Marker> toMarker() async => Marker(
+        markerId: MarkerId(id.toString()),
+        position: LatLng(
+          latitude,
+          longitude,
+        ),infoWindow: InfoWindow(
+    title: cityName,
+    snippet: '$temperature°'
+  ),
+        icon: await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(8, 8)), iconCode.toWeatherIcon()),
+      );
+
+  static Weather fromJson(Map<String, dynamic> json, {bool isList = false}) {
     final weather = json['weather'][0];
     final temp = json['main']['temp'];
     final maxTemp = json['main']['temp_max'];
     final minTemp = json['main']['temp_min'];
     final windSpeed = json['wind']['speed'];
+    var latitude;
+    var longitude;
+    if (isList) {
+      latitude = json['coord']['lat'];
+      longitude = json['coord']['lon'];
+    }
     return Weather(
       id: weather['id'],
       time: json['dt'],
@@ -56,13 +86,15 @@ class Weather {
       sunrise: json['sys']['sunrise'],
       sunset: json['sys']['sunset'],
       humidity: json['main']['humidity'],
+      latitude: latitude,
+      longitude: longitude,
       windSpeed: windSpeed is int ? windSpeed.toDouble() : windSpeed,
     );
   }
 
-  static List<Weather> fromForecastJson(Map<String, dynamic> json) {
+  static List<Weather> fromForecastJson(Map<String, dynamic> json,bool isList) {
     final weathers = (json['list'] as List)
-        ?.map((e) => e == null ? null : Weather.fromJson(e))
+        ?.map((e) => e == null ? null : Weather.fromJson(e, isList: isList))
         ?.toList();
 
     return weathers;
