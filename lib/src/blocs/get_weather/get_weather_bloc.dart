@@ -14,12 +14,12 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
   final UserLocationBloc _userLocationBloc;
   StreamSubscription _locationSubscription;
 
-  GetWeatherBloc(this._weatherRepository,this._userLocationBloc){
-   _locationSubscription = _userLocationBloc.listen((state) {
-     if(state is ShowUserLocation){
-       add(FetchWeather(state.userLocation));
-     }
-   });
+  GetWeatherBloc(this._weatherRepository, this._userLocationBloc) {
+    _locationSubscription = _userLocationBloc.listen((state) {
+      if (state is ShowUserLocation) {
+        add(FetchWeather(state.userLocation));
+      }
+    });
   }
 
   @override
@@ -39,7 +39,10 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
     try {
       final weather =
           await _weatherRepository.getWeatherByUserLocation(event.latLng);
-      final weathers = await _weatherRepository.getListWeather(weather.cityName);
+      final weathers = await _weatherRepository.getListWeather(
+          weather.cityName.toUpperCase() == 'JAKARTA SPECIAL CAPITAL REGION'
+              ? 'Jakarta'
+              : weather.cityName);
       weather.forecast = weathers;
       print("weather : ${weather.cityName}");
       yield ShowWeatherState(weather);

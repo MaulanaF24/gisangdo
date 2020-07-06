@@ -37,8 +37,8 @@ class _MapsState extends State<Maps> with AutomaticKeepAliveClientMixin {
           return Column(
             children: <Widget>[
               Expanded(
-                  flex: 2,
-                  child: ClusterGoogleMap(
+                  flex: 3,
+                  child: new ClusterGoogleMap(
                     center: widget.latLng,
                     controller: _clusterGoogleMapController,
                     markerList: state.mapMarkerList,
