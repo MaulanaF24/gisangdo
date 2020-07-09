@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gisangdo/src/blocs/user_location/user_location_event.dart';
 import 'package:gisangdo/src/blocs/user_location/user_location_state.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:permission_handler/permission_handler.dart';
 
 export 'package:gisangdo/src/blocs/user_location/user_location_event.dart';

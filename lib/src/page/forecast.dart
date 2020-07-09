@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,36 @@ class _ForecastState extends State<Forecast>
     super.build(context);
     return Stack(
       children: <Widget>[
-        BlocBuilder<GetWeatherBloc, GetWeatherState>(
+        BlocConsumer<GetWeatherBloc, GetWeatherState>(
+          listener: (context, state) {
+            if (state is LoadingWeatherState) {
+              AwesomeDialog(
+                context: context,
+                animType: AnimType.LEFTSLIDE,
+                headerAnimationLoop: false,
+                customHeader: Image.asset(
+                  'assets/jjf_spin.gif',
+                ),
+                dialogType: DialogType.SUCCES,
+                title: 'Please Wait. . .',
+                desc: '',
+              ).show();
+            }
+            if (state is ErrorWeatherState) {
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.ERROR,
+                animType: AnimType.RIGHSLIDE,
+                headerAnimationLoop: false,
+                btnOkColor: Colors.red,
+                title: 'Error',
+                desc: state.error,
+              ).show();
+            }
+            if (state is ShowWeatherState) {
+              Navigator.pop(context);
+            }
+          },
           builder: (context, state) {
             print(state.toString());
             if (state is ShowWeatherState) {
@@ -46,7 +76,8 @@ class _ForecastState extends State<Forecast>
                 ),
               );
               if (city != null) {
-                BlocProvider.of<GetWeatherBloc>(context).add(FetchWeatherByCity(city));
+                BlocProvider.of<GetWeatherBloc>(context)
+                    .add(FetchWeatherByCity(city));
               }
             },
             child: Icon(Icons.search),

@@ -37,8 +37,9 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
 
   Stream<GetWeatherState> _mapFetchWeatherToState(FetchWeather event) async* {
     try {
+      yield LoadingWeatherState();
       final weather =
-          await _weatherRepository.getWeatherByUserLocation(event.latLng);
+      await _weatherRepository.getWeatherByUserLocation(event.latLng);
       final weathers = await _weatherRepository.getListWeather(
           weather.cityName.toUpperCase() == 'JAKARTA SPECIAL CAPITAL REGION'
               ? 'Jakarta'
@@ -54,6 +55,7 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
   Stream<GetWeatherState> _mapFetchWeatherByCityToState(
       FetchWeatherByCity event) async* {
     try {
+      yield LoadingWeatherState();
       final weather = await _weatherRepository.getWeatherByCity(event.city);
       final weathers = await _weatherRepository.getListWeather(event.city);
       weather.forecast = weathers;
