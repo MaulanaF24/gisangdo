@@ -4,8 +4,6 @@ import 'package:gisangdo/src/models/weather_model.dart';
 @immutable
 abstract class GetWeatherState {}
 
-class InitialGetWeatherState extends GetWeatherState {}
-
 class LoadingWeatherState extends GetWeatherState {}
 
 class ShowWeatherState extends GetWeatherState {

@@ -23,3 +23,9 @@ class FailedUserLocation extends UserLocationState {
   @override
   String toString() => 'FailedUserLocation : $error';
 }
+
+class LocationIsDenied extends UserLocationState {}
+
+class NoInternet extends UserLocationState {}
+
+class LocationIsDisable extends UserLocationState {}

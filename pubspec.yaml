@@ -22,37 +22,28 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
-  geolocator: ^5.3.2+2
-  geocoder: ^0.2.1
+  cupertino_icons: 0.1.3
+  geolocator: 5.3.2+2
+  geocoder: 0.2.1
   flutter_bloc: 3.1.0
-  equatable: ^1.2.0
-  json_annotation: ^3.0.1
-  chopper: ^3.0.3
-  pull_to_refresh: ^1.5.8
-  awesome_dialog: ^1.1.2
-  provider: ^4.1.3
-  permission_handler: ^5.0.1
-  fluster: ^1.1.2
-  google_maps_flutter: ^0.5.28+1
-  http: ^0.12.1
-  charts_flutter: ^0.9.0
-  flutter_swiper: ^1.1.6
+  pull_to_refresh: 1.6.0
+  awesome_dialog: 1.1.3
+  provider: 4.3.1
+  permission_handler: 5.0.1
+  fluster: 1.1.2
+  google_maps_flutter: 0.5.28+1
+  http: 0.12.2
+  charts_flutter: 0.9.0
+  flutter_swiper: 1.1.6
+  connectivity: 0.4.9
+  system_settings: 1.0.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  chopper_generator: ^3.0.1
-  build_runner: ^1.0.0
-  json_serializable: ^3.2.0
-  flutter_launcher_icons: ^0.7.4
-
-flutter_icon:
-  image_path_android: "assets/gisangdo_logo.png"
-  image_path_ios: "assets/gisangdo_logo.png"
-  android: true
-  ios: true
+  build_runner: ^1.10.0
+  json_serializable: ^3.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

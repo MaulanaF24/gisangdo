@@ -6,14 +6,22 @@ import 'package:gisangdo/src/blocs/get_weather/get_weather_bloc.dart';
 import 'package:gisangdo/src/models/weather_model.dart';
 import 'package:gisangdo/src/widgets/city_selection.dart';
 import 'package:gisangdo/src/widgets/weather_widget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Forecast extends StatefulWidget {
+  final LatLng latLng;
+
+  Forecast(this.latLng);
+
   @override
   _ForecastState createState() => _ForecastState();
 }
 
 class _ForecastState extends State<Forecast>
     with AutomaticKeepAliveClientMixin {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
   Weather _weatherModel;
 
   @override
@@ -26,7 +34,7 @@ class _ForecastState extends State<Forecast>
     super.build(context);
     return Stack(
       children: <Widget>[
-        BlocConsumer<GetWeatherBloc, GetWeatherState>(
+        BlocListener<GetWeatherBloc, GetWeatherState>(
           listener: (context, state) {
             if (state is LoadingWeatherState) {
               AwesomeDialog(
@@ -53,17 +61,20 @@ class _ForecastState extends State<Forecast>
               ).show();
             }
             if (state is ShowWeatherState) {
+              _refreshController.refreshCompleted();
+              _weatherModel = state.weatherModel;
+              setState(() {});
               Navigator.pop(context);
             }
           },
-          builder: (context, state) {
-            print(state.toString());
-            if (state is ShowWeatherState) {
-              _weatherModel = state.weatherModel;
-              return WeatherWidget(weather: _weatherModel);
-            }
-            return Center(child: CircularProgressIndicator());
-          },
+          child: SmartRefresher(
+              controller: _refreshController,
+              onRefresh: () =>
+                  BlocProvider.of<GetWeatherBloc>(context)
+                      .add(FetchWeather(widget.latLng)),
+              child: _weatherModel != null
+                  ? WeatherWidget(weather: _weatherModel)
+                  : Container()),
         ),
         Container(
           alignment: Alignment.bottomCenter,

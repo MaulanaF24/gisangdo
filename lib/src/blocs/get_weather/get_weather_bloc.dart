@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gisangdo/src/blocs/get_weather/get_weather_event.dart';
 import 'package:gisangdo/src/blocs/get_weather/get_weather_state.dart';
-import 'package:gisangdo/src/blocs/user_location/user_location_bloc.dart';
 import 'package:gisangdo/src/repositories/weather_repository.dart';
 
 export 'package:gisangdo/src/blocs/get_weather/get_weather_event.dart';
@@ -11,19 +10,11 @@ export 'package:gisangdo/src/blocs/get_weather/get_weather_state.dart';
 
 class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
   final WeatherRepository _weatherRepository;
-  final UserLocationBloc _userLocationBloc;
-  StreamSubscription _locationSubscription;
 
-  GetWeatherBloc(this._weatherRepository, this._userLocationBloc) {
-    _locationSubscription = _userLocationBloc.listen((state) {
-      if (state is ShowUserLocation) {
-        add(FetchWeather(state.userLocation));
-      }
-    });
-  }
+  GetWeatherBloc(this._weatherRepository);
 
   @override
-  GetWeatherState get initialState => InitialGetWeatherState();
+  GetWeatherState get initialState => LoadingWeatherState();
 
   @override
   Stream<GetWeatherState> mapEventToState(GetWeatherEvent event) async* {
@@ -64,11 +55,5 @@ class GetWeatherBloc extends Bloc<GetWeatherEvent, GetWeatherState> {
     } catch (e) {
       yield ErrorWeatherState(e);
     }
-  }
-
-  @override
-  Future<void> close() {
-    _locationSubscription?.cancel();
-    return super.close();
   }
 }

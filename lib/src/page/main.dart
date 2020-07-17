@@ -25,24 +25,26 @@ class GisangdoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Gisangdo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
             primaryColor: Colors.lightBlue[800],
             accentColor: Colors.cyan[600],
             fontFamily: 'Montserrat',
             brightness: Brightness.light,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary)),
         darkTheme: ThemeData(
             primaryColor: Colors.lightBlue[800],
             accentColor: Colors.cyan[600],
             fontFamily: 'Montserrat',
             brightness: Brightness.dark,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary)),
         home: MultiBlocProvider(providers: [
           BlocProvider<UserLocationBloc>(
               create: (context) => UserLocationBloc()),
           BlocProvider<GetWeatherBloc>(
-              create: (context) => GetWeatherBloc(
-                  _weatherRepository, RepositoryProvider.of(context))),
+              create: (context) => GetWeatherBloc(_weatherRepository)),
           BlocProvider<MapWeatherBloc>(
               create: (context) => MapWeatherBloc(_weatherRepository)),
         ], child: Dashboard()));

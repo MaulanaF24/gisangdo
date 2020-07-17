@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gisangdo/src/blocs/user_location/user_location_event.dart';
@@ -30,11 +31,22 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
       if (permission == PermissionStatus.granted) {
         position = await _geolocation.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
-        geolocationStatus = await _geolocation.checkGeolocationPermissionStatus();
-        if(geolocationStatus.value == 2){
+        geolocationStatus =
+            await _geolocation.checkGeolocationPermissionStatus();
+        if (geolocationStatus.value == 2) {
           print("user location : ${position.latitude} , ${position.longitude}");
-          yield ShowUserLocation(LatLng(position.latitude,position.longitude));
+          final connectivityResult = await Connectivity().checkConnectivity();
+          if (connectivityResult != ConnectivityResult.none) {
+            yield ShowUserLocation(
+                LatLng(position.latitude, position.longitude));
+          } else {
+            yield NoInternet();
+          }
+        } else {
+          yield LocationIsDisable();
         }
+      } else {
+        yield LocationIsDenied();
       }
     } catch (e) {
       yield FailedUserLocation(e);
