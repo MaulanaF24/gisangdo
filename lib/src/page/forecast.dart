@@ -45,11 +45,14 @@ class _ForecastState extends State<Forecast>
                   'assets/jjf_spin.gif',
                 ),
                 dialogType: DialogType.SUCCES,
+                dismissOnTouchOutside: false,
                 title: 'Please Wait. . .',
                 desc: '',
               ).show();
             }
             if (state is ErrorWeatherState) {
+              Navigator.pop(context);
+              _refreshController.refreshCompleted();
               AwesomeDialog(
                 context: context,
                 dialogType: DialogType.ERROR,
@@ -69,9 +72,8 @@ class _ForecastState extends State<Forecast>
           },
           child: SmartRefresher(
               controller: _refreshController,
-              onRefresh: () =>
-                  BlocProvider.of<GetWeatherBloc>(context)
-                      .add(FetchWeather(widget.latLng)),
+              onRefresh: () => BlocProvider.of<GetWeatherBloc>(context)
+                  .add(FetchWeather(widget.latLng)),
               child: _weatherModel != null
                   ? WeatherWidget(weather: _weatherModel)
                   : Container()),

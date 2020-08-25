@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 
 class WeatherApiService {
   static const baseUrl = "https://api.openweathermap.org/data/2.5";
-  static const apiKey = 'YOUR - API - KEY';
+  static const apiKey = 'ccc5f058edb6c2e9317bd58911650752';
   final Client httpClient;
 
   WeatherApiService({this.httpClient}) : assert(httpClient != null);

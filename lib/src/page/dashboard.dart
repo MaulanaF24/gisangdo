@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gisangdo/src/blocs/user_location/user_location_bloc.dart';
 import 'package:gisangdo/src/page/forecast.dart';
 import 'package:gisangdo/src/page/maps.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:system_settings/system_settings.dart';
 
 class Dashboard extends StatefulWidget {
@@ -12,8 +15,10 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
+class _DashboardState extends State<Dashboard> with WidgetsBindingObserver {
+  RefreshController _refreshController = RefreshController();
   bool isForecast = true;
+  String appBarTitle = 'Weather';
 
   @override
   void initState() {
@@ -60,6 +65,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   if (!isForecast) {
                     setState(() {
                       isForecast = true;
+                      appBarTitle = 'Weather';
                     });
                   }
                   Navigator.pop(context);
@@ -71,7 +77,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                     Icon(Icons.map),
                     Padding(
                       padding: EdgeInsets.only(left: 8.0),
-                      child: Text('Forecast Map'),
+                      child: Text('Forecast Maps'),
                     )
                   ],
                 ),
@@ -79,6 +85,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   if (isForecast) {
                     setState(() {
                       isForecast = false;
+                      appBarTitle = 'Forecast Maps';
                     });
                   }
                   Navigator.pop(context);
@@ -88,7 +95,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
         ),
         appBar: AppBar(
-          title: Text("Gisangdo"),
+          title: Text(appBarTitle),
         ),
         body: BlocBuilder<UserLocationBloc, UserLocationState>(
           builder: (context, state) {
@@ -99,21 +106,23 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             if (state is NoInternet) {
               return errorPage(
                   title: 'There is no Connection',
-                  message: 'Please Turn it On',
+                  message: 'Please Turn it On, Then Refresh',
                   icon: Icons.signal_cellular_connected_no_internet_4_bar,
                   onPressed: () => SystemSettings.wireless());
             }
             if (state is LocationIsDenied) {
-              return errorPage(
-                  title: 'App need access to GPS Service',
-                  message: 'Click here to give access',
-                  icon: Icons.location_off,
-                  onPressed: () => SystemSettings.app());
+              return Center(
+                child: errorPage(
+                    title: 'App need access to GPS Service',
+                    message: 'Click here to give access, Then Refresh',
+                    icon: Icons.location_off,
+                    onPressed: () => SystemSettings.app()),
+              );
             }
             if (state is LocationIsDisable) {
               return errorPage(
                   title: 'Your gps service is disable',
-                  message: 'Click here to Turn it On',
+                  message: 'Click here to Turn it On, Then Refresh',
                   icon: Icons.location_off,
                   onPressed: () => SystemSettings.location());
             }
@@ -126,21 +135,37 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
   Widget errorPage(
       {String title, String message, IconData icon, Function onPressed}) {
-    return Center(
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Icon(icon),
-            Row(
-              children: <Widget>[
-                Text(title),
-                FlatButton(child: Text(message), onPressed: onPressed)
-              ],
-            )
-          ],
+    return SmartRefresher(
+      controller: _refreshController,
+      onRefresh: () {
+        BlocProvider.of<UserLocationBloc>(context).add(GetUserLocation());
+      },
+      child: Center(
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(icon),
+              Text(title),
+              FlatButton(
+                  child: Text(
+                    message,
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                  onPressed: onPressed)
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("cek state" + state.toString());
+    if (state == AppLifecycleState.resumed) {
+      BlocProvider.of<UserLocationBloc>(context).add(GetUserLocation());
+    }
   }
 }

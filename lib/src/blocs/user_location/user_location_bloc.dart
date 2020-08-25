@@ -28,20 +28,20 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
       GetUserLocation event) async* {
     try {
       PermissionStatus permission = await Permission.location.request();
+      final connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        yield NoInternet();
+        return;
+      }
       if (permission == PermissionStatus.granted) {
         position = await _geolocation.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
         geolocationStatus =
             await _geolocation.checkGeolocationPermissionStatus();
+        print("geolocation status : " + geolocationStatus.value.toString());
         if (geolocationStatus.value == 2) {
           print("user location : ${position.latitude} , ${position.longitude}");
-          final connectivityResult = await Connectivity().checkConnectivity();
-          if (connectivityResult != ConnectivityResult.none) {
-            yield ShowUserLocation(
-                LatLng(position.latitude, position.longitude));
-          } else {
-            yield NoInternet();
-          }
+          yield ShowUserLocation(LatLng(position.latitude, position.longitude));
         } else {
           yield LocationIsDisable();
         }
